@@ -1,6 +1,8 @@
 package com.example.rayan.mood_tracker.adapters;
 
 
+
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,8 +34,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ImageV
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
 
-        int image_id = images [position];
-        int colors_id = colors [position];
+        int i = position;
+        if (i==0)
+            holder.itemView.setBackgroundColor(Color.RED);
+
+        else if (i==1)
+            holder.itemView.setBackgroundColor(Color.MAGENTA);
+
+        else if (i==2)
+            holder.itemView.setBackgroundColor(Color.YELLOW);
+
+        else if (i==3)
+            holder.itemView.setBackgroundColor(Color.GREEN);
+
+        else if (i==4)
+            holder.itemView.setBackgroundColor(Color.CYAN);
+
+
+        int image_id = images [i];
+        int colors_id = colors [i];
         holder.Smiley.setImageResource(image_id);
         holder.itemView.setBackgroundColor(colors_id);
 
@@ -41,7 +60,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ImageV
 
     @Override
     public int getItemCount() {
-        return colors.length;
+        return 5;
     }
 
     public static class ImageViewHolder extends RecyclerView.ViewHolder {

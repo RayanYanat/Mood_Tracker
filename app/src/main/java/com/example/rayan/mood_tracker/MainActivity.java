@@ -1,5 +1,6 @@
 package com.example.rayan.mood_tracker;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,11 +13,10 @@ import com.example.rayan.mood_tracker.adapters.RecyclerAdapter;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private int[] images = {R.drawable.smiley_sad,R.drawable.smiley_disappointed,
+    public int[] images = {R.drawable.smiley_sad,R.drawable.smiley_disappointed,
             R.drawable.smiley_normal,R.drawable.smiley_happy,R.drawable.smiley_super_happy};
 
-    private int[] colors ={R.color.banana_yellow, R.color.light_sage, R.color.warm_grey, R.color.cornflower_blue_65
-            ,R.color.faded_red};
+    public int[] colors ={Color.RED,Color.MAGENTA,Color.YELLOW,Color.GREEN,Color.CYAN};
 
     private RecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
