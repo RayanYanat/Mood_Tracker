@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Mood_Tracker</string>
     <string name="ImageContentDesc">smiley</string>
+    <string name="comment_Popup">popup_comment</string>
 </resources>
