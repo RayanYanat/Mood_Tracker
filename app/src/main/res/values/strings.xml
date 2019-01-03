@@ -2,4 +2,9 @@
     <string name="app_name">Mood_Tracker</string>
     <string name="ImageContentDesc">smiley</string>
     <string name="comment_Popup">popup_comment</string>
+    <string name="history_commentBtn">history_commentBtn</string>
+    <string name="history_textView">history_textView</string>
+    <string name="history_item_layout">history_item_layout</string>
+    <string name="yesterday">hier</string>
+
 </resources>
