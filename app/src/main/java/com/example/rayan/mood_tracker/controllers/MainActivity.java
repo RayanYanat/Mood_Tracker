@@ -20,6 +20,7 @@ import android.widget.EditText;
 import com.example.rayan.mood_tracker.R;
 import com.example.rayan.mood_tracker.adapters.RecyclerAdapter;
 import com.example.rayan.mood_tracker.models.Mood;
+import com.example.rayan.mood_tracker.models.MoodStorage;
 
 
 import org.joda.time.DateTime;
@@ -38,9 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseManager mDatabaseManager;
 
-    private DateTime currentDate = DateTime.now().withHourOfDay(0).withMinuteOfHour(0);
-
-    private DateTime tomorrow = currentDate.plusDays(1).withHourOfDay(0).withMinuteOfHour(0);
+    MoodStorage lastMood = new DatabaseManager(this).readLast();
 
     private String comment;
 
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         EditText commentPopUp = mView.findViewById(R.id.comment_popup);
                         comment = commentPopUp.getText().toString();
-                        mDatabaseManager.insertComment(comment);
+                        mDatabaseManager.insertComment(comment, DateTime.now());
                         dialog.dismiss();
                     }
                 });
@@ -131,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
             int moodPosition = ((collection.size() + 1) / 2);
             Mood currentMood = collection.get(moodPosition);
 
+
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -153,13 +153,14 @@ public class MainActivity extends AppCompatActivity {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
+
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     resetComment();
                 } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (!currentDate.isBefore(tomorrow)) {
-                        mDatabaseManager.insertMood(currentMood, currentDate);
-
+                    if (DateTime.now().isEqual(lastMood.getEpoch())) {
+                        mDatabaseManager.insertMood(currentMood, DateTime.now());
                     }
+
                 }
 
             }

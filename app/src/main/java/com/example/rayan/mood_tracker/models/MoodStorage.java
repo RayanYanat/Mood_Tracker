@@ -42,6 +42,8 @@ public class MoodStorage {
         this.comment = comment;
     }
 
+    public DateTime getEpoch(){ return epoch ;}
+
     private void setEpoch(DateTime epoch) {
         this.epoch = epoch;
     }
@@ -51,7 +53,7 @@ public class MoodStorage {
                 "trois jours", "quatre jours", "cinq jours", "six jours", "une semaine"};
         mDate = dayOfTheWeek[position];
         if (position > 1)
-            return "il y a" + mDate;
+            return "il y a " + mDate;
         return mDate;
     }
 

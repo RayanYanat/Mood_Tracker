@@ -25,9 +25,6 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
 
     private List<MoodStorage> mMoodStorage;
 
-
-
-
     private  RecyclerViewClickListener mItemListener;
 
     public String date;
@@ -55,10 +52,10 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
 
         final MoodStorage currentItem = mMoodStorage.get(position);
 
-        holder.mFrameLayout.setBackgroundResource(currentItem.getMood().getColor());
+        holder.mFrameLayout.setBackgroundColor(currentItem.getMood().getColor());
         holder.mTextView.setText(currentItem.getDate((mMoodStorage.size() - 1) - position));
         holder.mImageButton.setImageResource(R.drawable.ic_comment_black_48px);
-        if(currentItem.getComment().equals("")){
+        if("".equals(currentItem.getComment())){
             holder.mImageButton.setVisibility(View.INVISIBLE);
         }
         else {

@@ -42,6 +42,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ImageV
         //affiche le Mood correspondant en fonction de la position
         holder.mSmiley.setImageResource(moodItem.getDrawableRes());
         holder.itemView.setBackgroundColor(moodItem.getColor());
+        holder.itemView.playSoundEffect(moodItem.getSound());
 
     }
     //le nombre d'item a afficher correspond aux nombres d'item dans notre liste de mood
