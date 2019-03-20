@@ -5,19 +5,20 @@ import android.support.annotation.IntRange;
 
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 
 public class MoodStorage {
 
     private  Mood mMood;
-    private DateTime epoch;
+    private LocalDate epoch;
     private  String mDate;
     private String comment;
 
 
 
 
-    public MoodStorage(Mood mood, DateTime epoch, String comment) {
+    public MoodStorage(Mood mood, LocalDate epoch, String comment) {
 
         this.setMood(mood);
         this.setEpoch(epoch);
@@ -42,9 +43,9 @@ public class MoodStorage {
         this.comment = comment;
     }
 
-    public DateTime getEpoch(){ return epoch ;}
+    public LocalDate getEpoch(){ return epoch ;}
 
-    private void setEpoch(DateTime epoch) {
+    private void setEpoch(LocalDate epoch) {
         this.epoch = epoch;
     }
 

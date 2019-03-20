@@ -16,7 +16,7 @@ import com.example.rayan.mood_tracker.RecyclerViewClickListener;
 import com.example.rayan.mood_tracker.models.MoodStorage;
 
 
-
+import java.util.Collections;
 import java.util.List;
 
 public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecyclerAdapter.StoredMoodViewHolder> implements RecyclerViewClickListener {
@@ -56,7 +56,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
         holder.mTextView.setText(currentItem.getDate((mMoodStorage.size() - 1) - position));
         holder.mImageButton.setImageResource(R.drawable.ic_comment_black_48px);
         if("".equals(currentItem.getComment())){
-            holder.mImageButton.setVisibility(View.INVISIBLE);
+            holder.mImageButton.setVisibility(View.GONE);
         }
         else {
             holder.mImageButton.setVisibility(View.VISIBLE);
@@ -73,7 +73,18 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
     public int getItemCount() {
         if (mMoodStorage.size() > HISTORY_ITEM)
             mMoodStorage.remove(0);
+
         return mMoodStorage.size();
+
+    }
+
+    public void swapHistoryItem(){
+        Collections.swap(mMoodStorage,6,5);
+        Collections.swap(mMoodStorage,5,4);
+        Collections.swap(mMoodStorage,4,3);
+        Collections.swap(mMoodStorage,3,2);
+        Collections.swap(mMoodStorage,2,1);
+        Collections.swap(mMoodStorage,1,0);
     }
 
     @Override
@@ -106,6 +117,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
 
     }
     }
+
 
 
 

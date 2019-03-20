@@ -10,6 +10,7 @@ import com.example.rayan.mood_tracker.models.Mood;
 import com.example.rayan.mood_tracker.models.MoodStorage;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 
 import java.util.ArrayList;
@@ -46,14 +47,19 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     }
 
-    public void insertMood(Mood mood, DateTime epoch) {
+    public void insertMood(Mood mood, LocalDate epoch) {
 
         String strSql = " INSERT INTO " + TABLE_TITTLE + " (mood_enum ,epoch) VALUES ('"
                 + mood.name() + "','" + epoch + "')";
         this.getWritableDatabase().execSQL(strSql);
     }
 
-    public void insertComment(String comment, DateTime epoch) {
+    public void updateMood(Mood mood,LocalDate epoch){
+        String strSql = "UPDATE " + TABLE_TITTLE + " SET mood_enum = '" + mood.name() + "' WHERE epoch ='" + epoch + "'";
+        getWritableDatabase().execSQL(strSql);
+    }
+
+    public void updateComment(String comment, LocalDate epoch) {
         String strSql1 = "UPDATE " + TABLE_TITTLE + " SET commentary = '" + comment + "' WHERE epoch ='" + epoch + "'";
         this.getWritableDatabase().execSQL(strSql1);
 
@@ -62,11 +68,11 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public MoodStorage readLast() {
         String strSql2 = "SELECT * FROM " + TABLE_TITTLE + " ORDER BY epoch DESC LIMIT 1";
         Cursor cursor2 = this.getReadableDatabase().rawQuery(strSql2, null);
-
+        cursor2.moveToLast();
         String moodEnumName = cursor2.getString(cursor2.getColumnIndex(MOOD_ENUM));
 
         MoodStorage lastMoodStored = new MoodStorage(Mood.valueOf(moodEnumName),
-                new DateTime(cursor2.getString(cursor2.getColumnIndex(COLUMN_EPOCH))),
+                new LocalDate(cursor2.getString(cursor2.getColumnIndex(COLUMN_EPOCH))),
                 cursor2.getString(cursor2.getColumnIndex(COLUMN_COMMENT)));
         cursor2.close();
 
@@ -82,7 +88,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             String moodEnumName = cursor.getString(cursor.getColumnIndex(MOOD_ENUM));
 
             MoodStorage moodStorage = new MoodStorage(Mood.valueOf(moodEnumName),
-                    new DateTime(cursor.getString(cursor.getColumnIndex(COLUMN_EPOCH))),
+                    new LocalDate(cursor.getString(cursor.getColumnIndex(COLUMN_EPOCH))),
                     cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)));
 
             moods.add(moodStorage);

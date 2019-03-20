@@ -3,6 +3,7 @@ package com.example.rayan.mood_tracker.controllers;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +24,7 @@ import com.example.rayan.mood_tracker.models.Mood;
 import com.example.rayan.mood_tracker.models.MoodStorage;
 
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 
 import java.util.ArrayList;
@@ -39,9 +40,11 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseManager mDatabaseManager;
 
-    MoodStorage lastMood = new DatabaseManager(this).readLast();
+    int moodPosition ;
 
     private String comment;
+
+    private MediaPlayer mMediaPlayer;
 
 
     @Override
@@ -95,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         EditText commentPopUp = mView.findViewById(R.id.comment_popup);
                         comment = commentPopUp.getText().toString();
-                        mDatabaseManager.insertComment(comment, DateTime.now());
+                        mDatabaseManager.updateComment(comment, LocalDate.now());
                         dialog.dismiss();
                     }
                 });
@@ -127,24 +130,22 @@ public class MainActivity extends AppCompatActivity {
         //base de donnee les data du dernier mood scrollé lorsque la date change
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
-            int moodPosition = ((collection.size() + 1) / 2);
-            Mood currentMood = collection.get(moodPosition);
-
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
+                 moodPosition = ((collection.size() + 1) / 2);
 
-                if (dy < 0) {
-                    moodPosition++;
+                    if (dy < 0) {
+                        moodPosition++;
 
-                } else if (dy > 0) {
-                    moodPosition--;
+                    } else if (dy > 0) {
+                        moodPosition--;
 
-                } else {
-                    moodPosition = ((collection.size() + 1) / 2);
-                }
+                    } else {
+                        moodPosition = ((collection.size() + 1) / 2);
+                    }
 
             }
 
@@ -153,14 +154,18 @@ public class MainActivity extends AppCompatActivity {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
+                MoodStorage lastMood = mDatabaseManager.readLast();
+                Mood currentMood = collection.get(moodPosition);
 
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     resetComment();
                 } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (DateTime.now().isEqual(lastMood.getEpoch())) {
-                        mDatabaseManager.insertMood(currentMood, DateTime.now());
+                    playSound(currentMood.getSound());
+                    if (lastMood.getEpoch().equals(LocalDate.now())) {
+                        mDatabaseManager.updateMood(currentMood, LocalDate.now());
+                    } else {
+                        mDatabaseManager.insertMood(currentMood, LocalDate.now());
                     }
-
                 }
 
             }
@@ -168,9 +173,28 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MoodStorage lastMood = mDatabaseManager.readLast();
+        if (lastMood.getEpoch().equals(LocalDate.now())) {
+            moodPosition = lastMood.getMood().ordinal();
+            recyclerView.scrollToPosition(moodPosition);
+        } else {
+            mDatabaseManager.insertMood(Mood.values()[moodPosition], LocalDate.now());
+        }
+
+
+    }
+
     //reset la valeur du commentaire chaque fois que l'utilisateur scroll
     public void resetComment() {
         comment = "";
+    }
+
+    public void playSound(int sound){
+        mMediaPlayer = MediaPlayer.create(this,sound);
+        mMediaPlayer.start();
     }
 
 }
