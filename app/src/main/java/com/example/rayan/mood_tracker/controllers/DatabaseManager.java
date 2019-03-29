@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.Nullable;
 
 
 import com.example.rayan.mood_tracker.models.Mood;
@@ -14,6 +15,7 @@ import org.joda.time.LocalDate;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DatabaseManager extends SQLiteOpenHelper {
@@ -65,10 +67,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     }
 
+    @Nullable
     public MoodStorage readLast() {
         String strSql2 = "SELECT * FROM " + TABLE_TITTLE + " ORDER BY epoch DESC LIMIT 1";
         Cursor cursor2 = this.getReadableDatabase().rawQuery(strSql2, null);
-        cursor2.moveToLast();
+        if ( !cursor2.moveToLast()){
+            return null;
+        }
+
         String moodEnumName = cursor2.getString(cursor2.getColumnIndex(MOOD_ENUM));
 
         MoodStorage lastMoodStored = new MoodStorage(Mood.valueOf(moodEnumName),
@@ -95,6 +101,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             cursor.moveToNext();
         }
         cursor.close();
+        Collections.reverse(moods);
 
         return moods;
 

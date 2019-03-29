@@ -16,12 +16,10 @@ import com.example.rayan.mood_tracker.RecyclerViewClickListener;
 import com.example.rayan.mood_tracker.models.MoodStorage;
 
 
-import java.util.Collections;
 import java.util.List;
 
 public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecyclerAdapter.StoredMoodViewHolder> implements RecyclerViewClickListener {
 
-    private static final int HISTORY_ITEM = 7;
 
     private List<MoodStorage> mMoodStorage;
 
@@ -41,8 +39,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
     public StoredMoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.history_item, parent, false);
         view.getLayoutParams().height = parent.getHeight() / 7;
-        StoredMoodViewHolder storedMoodViewHolder = new StoredMoodViewHolder(view,this);
-        return storedMoodViewHolder;
+        return new StoredMoodViewHolder(view, this);
     }
 
 
@@ -55,7 +52,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
         holder.mFrameLayout.setBackgroundColor(currentItem.getMood().getColor());
         holder.mTextView.setText(currentItem.getDate((mMoodStorage.size() - 1) - position));
         holder.mImageButton.setImageResource(R.drawable.ic_comment_black_48px);
-        if("".equals(currentItem.getComment())){
+        if((currentItem.getComment())== null || "".equals(currentItem.getComment())){
             holder.mImageButton.setVisibility(View.GONE);
         }
         else {
@@ -71,21 +68,10 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
 
     @Override
     public int getItemCount() {
-        if (mMoodStorage.size() > HISTORY_ITEM)
-            mMoodStorage.remove(0);
-
         return mMoodStorage.size();
-
     }
 
-    public void swapHistoryItem(){
-        Collections.swap(mMoodStorage,6,5);
-        Collections.swap(mMoodStorage,5,4);
-        Collections.swap(mMoodStorage,4,3);
-        Collections.swap(mMoodStorage,3,2);
-        Collections.swap(mMoodStorage,2,1);
-        Collections.swap(mMoodStorage,1,0);
-    }
+
 
     @Override
     public void onClick(View v, int position) {

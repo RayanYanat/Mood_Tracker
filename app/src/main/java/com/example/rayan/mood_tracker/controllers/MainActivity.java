@@ -34,6 +34,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static int BUNDLE_REQUEST_CODE = 36;
+
     private RecyclerView recyclerView;
 
     private List<Mood> collection = new ArrayList<>();
@@ -44,7 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
     private String comment;
 
-    private MediaPlayer mMediaPlayer;
+    private MediaPlayer [] mMediaPlayer = new MediaPlayer[Mood.values().length];
+
+
 
 
     @Override
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         SnapHelper snapHelper = new LinearSnapHelper();
@@ -131,21 +134,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
 
+
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                mDatabaseManager.updateComment("",LocalDate.now());
 
-                 moodPosition = ((collection.size() + 1) / 2);
-
-                    if (dy < 0) {
-                        moodPosition++;
-
-                    } else if (dy > 0) {
-                        moodPosition--;
-
-                    } else {
-                        moodPosition = ((collection.size() + 1) / 2);
-                    }
 
             }
 
@@ -155,12 +149,15 @@ public class MainActivity extends AppCompatActivity {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 MoodStorage lastMood = mDatabaseManager.readLast();
-                Mood currentMood = collection.get(moodPosition);
+                Mood currentMood = collection.get(layoutManager.findFirstVisibleItemPosition());
 
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     resetComment();
                 } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    playSound(currentMood.getSound());
+                    layoutManager.findFirstVisibleItemPosition();
+                    playSound(currentMood);
+
+                    assert lastMood != null;
                     if (lastMood.getEpoch().equals(LocalDate.now())) {
                         mDatabaseManager.updateMood(currentMood, LocalDate.now());
                     } else {
@@ -176,8 +173,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        moodPosition = ((collection.size() + 1) / 2);
         MoodStorage lastMood = mDatabaseManager.readLast();
-        if (lastMood.getEpoch().equals(LocalDate.now())) {
+        if (lastMood != null && lastMood.getEpoch().equals(LocalDate.now())) {
             moodPosition = lastMood.getMood().ordinal();
             recyclerView.scrollToPosition(moodPosition);
         } else {
@@ -192,9 +190,11 @@ public class MainActivity extends AppCompatActivity {
         comment = "";
     }
 
-    public void playSound(int sound){
-        mMediaPlayer = MediaPlayer.create(this,sound);
-        mMediaPlayer.start();
+    public void playSound(Mood mood){
+        if(mMediaPlayer[mood.ordinal()] == null) {
+            mMediaPlayer [mood.ordinal()] = MediaPlayer.create(this, mood.getSound());
+        }
+        mMediaPlayer[mood.ordinal()].start();
     }
 
 }
