@@ -23,14 +23,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ImageV
         mData = data;
     }
 
-    @Override
-    public ImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //inflate le fichier xml
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.smiley_item, parent, false);
-        //creer une nouvelle classe qui prend en parametre view
-        ImageViewHolder imageViewHolder = new ImageViewHolder(view);
 
-        return imageViewHolder;
+    @NonNull
+    @Override
+    public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.smiley_item, parent, false);
+        return new ImageViewHolder(view);
     }
 
     @Override
@@ -39,23 +38,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ImageV
         Mood moodItem = mData.get(position);
         moodItem.name();
 
-        //affiche le Mood correspondant en fonction de la position
         holder.mSmiley.setImageResource(moodItem.getDrawableRes());
         holder.itemView.setBackgroundColor(moodItem.getColor());
 
     }
-    //le nombre d'item a afficher correspond aux nombres d'item dans notre liste de mood
+
     @Override
     public int getItemCount() {
         return mData.size();
     }
 
-    // permet de definir l imageview a recycler quand l'utilisateur scroll
-    public static class ImageViewHolder extends RecyclerView.ViewHolder {
+    static class ImageViewHolder extends RecyclerView.ViewHolder {
 
         ImageView mSmiley;
 
-        public ImageViewHolder(View itemView) {
+        ImageViewHolder(View itemView) {
             super(itemView);
             mSmiley = itemView.findViewById(R.id.imageView_smiley);
 

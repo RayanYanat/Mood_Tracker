@@ -23,7 +23,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
 
     private List<MoodStorage> mMoodStorage;
 
-    private  RecyclerViewClickListener mItemListener;
+    private RecyclerViewClickListener mItemListener;
 
     public String date;
 
@@ -52,16 +52,11 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
         holder.mFrameLayout.setBackgroundColor(currentItem.getMood().getColor());
         holder.mTextView.setText(currentItem.getDate((mMoodStorage.size() - 1) - position));
         holder.mImageButton.setImageResource(R.drawable.ic_comment_black_48px);
-        if((currentItem.getComment())== null || "".equals(currentItem.getComment())){
+        if ((currentItem.getComment()) == null || "".equals(currentItem.getComment())) {
             holder.mImageButton.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             holder.mImageButton.setVisibility(View.VISIBLE);
         }
-
-
-
-
 
 
     }
@@ -72,10 +67,9 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
     }
 
 
-
     @Override
     public void onClick(View v, int position) {
-        mItemListener.onClick(v,position);
+        mItemListener.onClick(v, position);
     }
 
     public static class StoredMoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -85,7 +79,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
         private RecyclerViewClickListener mListener;
 
 
-        private StoredMoodViewHolder(View itemView,RecyclerViewClickListener listener) {
+        private StoredMoodViewHolder(View itemView, RecyclerViewClickListener listener) {
             super(itemView);
             mFrameLayout = itemView.findViewById(R.id.history_item_layout);
             mTextView = itemView.findViewById(R.id.history_textView);
@@ -102,7 +96,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
 
 
     }
-    }
+}
 
 
 

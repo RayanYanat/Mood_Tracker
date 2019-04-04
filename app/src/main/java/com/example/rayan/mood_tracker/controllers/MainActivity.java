@@ -41,13 +41,11 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseManager mDatabaseManager;
 
-    int moodPosition ;
+    int moodPosition;
 
     private String comment;
 
-    private MediaPlayer [] mMediaPlayer = new MediaPlayer[Mood.values().length];
-
-
+    private MediaPlayer[] mMediaPlayer = new MediaPlayer[Mood.values().length];
 
 
     @Override
@@ -65,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         Button commentButton = findViewById(R.id.activity_main_comment_btn);
 
 
-        //permet de choisir la position de depart de notre recyclerview
+        //allows to choose the starting position of our recyclerview
         recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -84,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDatabaseManager = new DatabaseManager(this);
 
-        //affiche une fenetre de dialogue lorsque l'utilisateur appuie sur le bouton comment
+        //displays a dialog window when the user presses the comment button
         commentButton.setOnClickListener(new View.OnClickListener() {
 
             @SuppressLint("InflateParams")
@@ -118,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Demarre l'history activity quand l'utilisateur appuie sur le bouton historique
+        //Start the history activity when the user presses the history button
         historyButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -129,16 +127,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //permet de recuperer le mood actuellement scrollé par l'utilisateur et de d' ajouer a notre
-        //base de donnee les data du dernier mood scrollé lorsque la date change
+        //allows to recover the mood currently scrolled by the user and
+        // to add to our database the data of the last scrolled mood when the date changes
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
 
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                mDatabaseManager.updateComment("",LocalDate.now());
 
 
             }
@@ -152,7 +148,9 @@ public class MainActivity extends AppCompatActivity {
                 Mood currentMood = collection.get(layoutManager.findFirstVisibleItemPosition());
 
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    resetComment();
+                    mDatabaseManager.updateComment("", LocalDate.now());
+
+
                 } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     layoutManager.findFirstVisibleItemPosition();
                     playSound(currentMood);
@@ -177,22 +175,17 @@ public class MainActivity extends AppCompatActivity {
         MoodStorage lastMood = mDatabaseManager.readLast();
         if (lastMood != null && lastMood.getEpoch().equals(LocalDate.now())) {
             moodPosition = lastMood.getMood().ordinal();
-            recyclerView.scrollToPosition(moodPosition);
         } else {
             mDatabaseManager.insertMood(Mood.values()[moodPosition], LocalDate.now());
         }
+        recyclerView.scrollToPosition(moodPosition);
 
 
     }
 
-    //reset la valeur du commentaire chaque fois que l'utilisateur scroll
-    public void resetComment() {
-        comment = "";
-    }
-
-    public void playSound(Mood mood){
-        if(mMediaPlayer[mood.ordinal()] == null) {
-            mMediaPlayer [mood.ordinal()] = MediaPlayer.create(this, mood.getSound());
+    public void playSound(Mood mood) {
+        if (mMediaPlayer[mood.ordinal()] == null) {
+            mMediaPlayer[mood.ordinal()] = MediaPlayer.create(this, mood.getSound());
         }
         mMediaPlayer[mood.ordinal()].start();
     }

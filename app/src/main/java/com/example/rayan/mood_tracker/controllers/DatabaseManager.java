@@ -10,7 +10,7 @@ import android.support.annotation.Nullable;
 import com.example.rayan.mood_tracker.models.Mood;
 import com.example.rayan.mood_tracker.models.MoodStorage;
 
-import org.joda.time.DateTime;
+
 import org.joda.time.LocalDate;
 
 
@@ -26,7 +26,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private static final String COLUMN_EPOCH = "epoch";
     private static final String COLUMN_COMMENT = "commentary";
     private static final String TABLE_TITTLE = "T_Mood";
-    public static final String MOOD_ENUM = "mood_enum";
+    private static final String MOOD_ENUM = "mood_enum";
 
     DatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -56,7 +56,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         this.getWritableDatabase().execSQL(strSql);
     }
 
-    public void updateMood(Mood mood,LocalDate epoch){
+    public void updateMood(Mood mood, LocalDate epoch) {
         String strSql = "UPDATE " + TABLE_TITTLE + " SET mood_enum = '" + mood.name() + "' WHERE epoch ='" + epoch + "'";
         getWritableDatabase().execSQL(strSql);
     }
@@ -71,7 +71,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public MoodStorage readLast() {
         String strSql2 = "SELECT * FROM " + TABLE_TITTLE + " ORDER BY epoch DESC LIMIT 1";
         Cursor cursor2 = this.getReadableDatabase().rawQuery(strSql2, null);
-        if ( !cursor2.moveToLast()){
+        if (!cursor2.moveToLast()) {
             return null;
         }
 
@@ -87,9 +87,10 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     public List<MoodStorage> readLast7() {
         ArrayList<MoodStorage> moods = new ArrayList<>();
-        String strSql = "SELECT * FROM " + TABLE_TITTLE + " ORDER BY epoch DESC LIMIT 7";
+        String strSql = "SELECT * FROM " + TABLE_TITTLE + " ORDER BY epoch DESC LIMIT 8";
         Cursor cursor = this.getReadableDatabase().rawQuery(strSql, null);
         cursor.moveToFirst();
+        cursor.moveToNext();
         while (!cursor.isAfterLast()) {
             String moodEnumName = cursor.getString(cursor.getColumnIndex(MOOD_ENUM));
 

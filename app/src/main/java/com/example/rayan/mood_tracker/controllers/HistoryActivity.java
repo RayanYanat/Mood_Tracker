@@ -16,37 +16,28 @@ import com.example.rayan.mood_tracker.RecyclerViewClickListener;
 import com.example.rayan.mood_tracker.adapters.HistoryRecyclerAdapter;
 import com.example.rayan.mood_tracker.models.MoodStorage;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity implements RecyclerViewClickListener {
 
-    private RecyclerView historyRecyclerView;
-
-    private List<MoodStorage> mMoodStorages = new ArrayList<>();
-
     private DatabaseManager mDatabaseManager;
-
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.history_activity);
-        historyRecyclerView = findViewById(R.id.history_recyclerview);
-        mMoodStorages = new DatabaseManager(this).readLast7();
+        RecyclerView historyRecyclerView = findViewById(R.id.history_recyclerview);
+        List<MoodStorage> moodStorages = new DatabaseManager(this).readLast7();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         historyRecyclerView.setHasFixedSize(true);
         historyRecyclerView.setLayoutManager(layoutManager);
-        HistoryRecyclerAdapter adapter = new HistoryRecyclerAdapter(mMoodStorages, this);
+        HistoryRecyclerAdapter adapter = new HistoryRecyclerAdapter(moodStorages, this);
         historyRecyclerView.setAdapter(adapter);
 
         mDatabaseManager = new DatabaseManager(this);
-
-
-
 
 
     }
