@@ -28,7 +28,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private static final String TABLE_TITTLE = "T_Mood";
     private static final String MOOD_ENUM = "mood_enum";
 
-    DatabaseManager(Context context) {
+    public DatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -87,10 +87,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     public List<MoodStorage> readLast7() {
         ArrayList<MoodStorage> moods = new ArrayList<>();
-        String strSql = "SELECT * FROM " + TABLE_TITTLE + " ORDER BY epoch DESC LIMIT 8";
+        String strSql = "SELECT * FROM " + TABLE_TITTLE + " ORDER BY epoch DESC LIMIT 7";
         Cursor cursor = this.getReadableDatabase().rawQuery(strSql, null);
         cursor.moveToFirst();
-        cursor.moveToNext();
         while (!cursor.isAfterLast()) {
             String moodEnumName = cursor.getString(cursor.getColumnIndex(MOOD_ENUM));
 

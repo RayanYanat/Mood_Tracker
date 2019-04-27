@@ -41,6 +41,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ImageV
         holder.mSmiley.setImageResource(moodItem.getDrawableRes());
         holder.itemView.setBackgroundColor(moodItem.getColor());
 
+
     }
 
     @Override

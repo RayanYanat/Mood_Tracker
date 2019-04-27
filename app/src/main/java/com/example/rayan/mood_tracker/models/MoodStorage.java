@@ -48,10 +48,10 @@ public class MoodStorage {
     }
 
     public String getDate(@IntRange(from = 0, to = 6) int position) {
-        String dayOfTheWeek[] = {"Hier", "Avant-hier",
-                "trois jours", "quatre jours", "cinq jours", "six jours", "une semaine"};
+        String dayOfTheWeek[] = {"Aujourd'hui","Hier", "Avant-hier",
+                "trois jours", "quatre jours", "cinq jours", "six jours"};
         String date = dayOfTheWeek[position];
-        if (position > 1)
+        if (position > 2)
             return "il y a " + date;
         return date;
     }
