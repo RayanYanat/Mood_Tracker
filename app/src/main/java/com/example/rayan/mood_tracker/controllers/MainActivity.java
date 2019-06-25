@@ -52,27 +52,40 @@ public class MainActivity extends AppCompatActivity {
 
     private MediaPlayer[] mMediaPlayer = new MediaPlayer[Mood.values().length];
 
+    private Button historyButton;
+    private Button commentButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        collection.add(Mood.SAD);
-        collection.add(Mood.DISAPPOINTED);
-        collection.add(Mood.NORMAL);
-        collection.add(Mood.HAPPY);
-        collection.add(Mood.SUPER_HAPPY);
 
         recyclerView = findViewById(R.id.MyRecyclerView);
-        Button historyButton = findViewById(R.id.activity_main_history_btn);
-        Button commentButton = findViewById(R.id.activity_main_comment_btn);
+        historyButton = findViewById(R.id.activity_main_history_btn);
+        commentButton = findViewById(R.id.activity_main_comment_btn);
 
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         mDatabaseManager = new DatabaseManager(this);
 
+        setUpCollection();
+        setUpRecyclerView(layoutManager);
+        setUpRecyclerViewScroll(layoutManager);
+        setUpButton();
+        setUpAlarm();
 
+    }
+    private void setUpCollection(){
+        collection.add(Mood.SAD);
+        collection.add(Mood.DISAPPOINTED);
+        collection.add(Mood.NORMAL);
+        collection.add(Mood.HAPPY);
+        collection.add(Mood.SUPER_HAPPY);
+    }
+
+    private void setUpRecyclerView(LinearLayoutManager layoutManager){
         //allows to choose the starting position of our recyclerview
         recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -88,8 +101,9 @@ public class MainActivity extends AppCompatActivity {
         snapHelper.attachToRecyclerView(recyclerView);
         RecyclerAdapter adapter = new RecyclerAdapter(collection);
         recyclerView.setAdapter(adapter);
+    }
 
-
+    private void setUpButton(){
         //displays a dialog window when the user presses the comment button
         commentButton.setOnClickListener(new View.OnClickListener() {
 
@@ -97,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage("commentary");
+                builder.setMessage("Commentary");
                 final View mView;
                 mView = LayoutInflater.from(MainActivity.this).inflate(R.layout.comment_popup, null);
                 builder.setView(mView);
@@ -135,8 +149,28 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    private void setUpAlarm(){
+        // The alarm is set to be launch at midnight
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.add(Calendar.DATE, 1);
 
+        // Recover a PendingIntent that will perform a broadcast
+        Intent alarmIntent = new Intent(this, MyAlarm.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+        //setting of our alarm
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
+    }
+
+    private void setUpRecyclerViewScroll(final LinearLayoutManager layoutManager){
         // allows to recover the mood currently scrolled by the user and to add to our database the data of the last scrolled mood when the date changes
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -173,24 +207,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        // The alarm is set to be launch at midnight
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.add(Calendar.DATE, 1);
-
-        // Recover a PendingIntent that will perform a broadcast
-        Intent alarmIntent = new Intent(this, MyAlarm.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-        //setting of our alarm
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        }
-
-
     }
 
 
