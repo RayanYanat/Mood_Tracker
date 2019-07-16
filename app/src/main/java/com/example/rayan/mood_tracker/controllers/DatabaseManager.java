@@ -90,6 +90,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         String strSql = "SELECT * FROM " + TABLE_TITTLE + " ORDER BY epoch DESC LIMIT 7";
         Cursor cursor = this.getReadableDatabase().rawQuery(strSql, null);
         cursor.moveToFirst();
+        cursor.moveToNext();
         while (!cursor.isAfterLast()) {
             String moodEnumName = cursor.getString(cursor.getColumnIndex(MOOD_ENUM));
 

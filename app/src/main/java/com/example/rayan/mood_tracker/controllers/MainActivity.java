@@ -91,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                recyclerView.scrollToPosition((collection.size() + 1) / 2);
+                if (mDatabaseManager.readLast().getMood()!= null) {
+                    recyclerView.scrollToPosition((mDatabaseManager.readLast().getMood().getPosition()));
+                }
             }
         });
 
@@ -222,6 +224,19 @@ public class MainActivity extends AppCompatActivity {
         }
         recyclerView.scrollToPosition(moodPosition);
 
+
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        moodPosition = ((collection.size() + 1) / 2);
+        MoodStorage lastMood = mDatabaseManager.readLast();
+        if (lastMood != null && lastMood.getEpoch().equals(LocalDate.now())) {
+            moodPosition = lastMood.getMood().ordinal();
+        } else {
+            mDatabaseManager.insertMood(Mood.values()[moodPosition], LocalDate.now());
+        }
+        recyclerView.scrollToPosition(moodPosition);
 
     }
 
