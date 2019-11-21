@@ -1,6 +1,8 @@
 package com.example.rayan.mood_tracker.adapters;
 
 
+
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,6 +41,7 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
     public StoredMoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.history_item, parent, false);
         view.getLayoutParams().height = parent.getHeight() / 7;
+        view.getLayoutParams().width = parent.getWidth();
         return new StoredMoodViewHolder(view, this);
     }
 
@@ -49,6 +52,8 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
 
         final MoodStorage currentItem = mMoodStorage.get(position);
 
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+
         holder.mFrameLayout.setBackgroundColor(currentItem.getMood().getColor());
         holder.mTextView.setText(currentItem.getDate((mMoodStorage.size() - 1) - position));
         holder.mImageButton.setImageResource(R.drawable.ic_comment_black_48px);
@@ -57,8 +62,24 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
         } else {
             holder.mImageButton.setVisibility(View.VISIBLE);
         }
+        switch (currentItem.getMood().getPosition()){
+            case 0:
+                holder.mFrameLayout.getLayoutParams().width = width*25/100;
+                break;
+            case 1:
+                holder.mFrameLayout.getLayoutParams().width = width*40/100;
+                break;
+            case 2:
+                holder.mFrameLayout.getLayoutParams().width = width*60/100;
+                break;
+            case 3:
+                holder.mFrameLayout.getLayoutParams().width = width*80/100;
+                break;
+            case 4:
+                holder.mFrameLayout.getLayoutParams().width = width;
+                break;
 
-
+        }
     }
 
     @Override

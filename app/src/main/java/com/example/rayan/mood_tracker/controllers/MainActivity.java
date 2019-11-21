@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.rayan.mood_tracker.R;
 import com.example.rayan.mood_tracker.adapters.RecyclerAdapter;
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                         comment = commentPopUp.getText().toString();
                         mDatabaseManager.updateComment(comment, LocalDate.now());
                         dialog.dismiss();
+                        Toast.makeText(getApplicationContext(),comment,Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -148,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent HistoryActivity = new Intent(MainActivity.this, HistoryActivity.class);
                 startActivityForResult(HistoryActivity, BUNDLE_REQUEST_CODE);
-
             }
         });
     }

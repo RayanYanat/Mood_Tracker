@@ -87,7 +87,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     public List<MoodStorage> readLast7() {
         ArrayList<MoodStorage> moods = new ArrayList<>();
-        String strSql = "SELECT * FROM " + TABLE_TITTLE + " ORDER BY epoch DESC LIMIT 7";
+        String strSql = "SELECT * FROM " + TABLE_TITTLE + " ORDER BY epoch DESC LIMIT 8";
         Cursor cursor = this.getReadableDatabase().rawQuery(strSql, null);
         cursor.moveToFirst();
         cursor.moveToNext();

@@ -39,12 +39,15 @@ public class HistoryActivity extends AppCompatActivity implements RecyclerViewCl
 
         mDatabaseManager = new DatabaseManager(this);
 
-
     }
 
     @Override
     public void onClick(View v, int position) {
-        Toast.makeText(this, mDatabaseManager.readLast7().get(position).getComment(), Toast.LENGTH_LONG).show();
+        if(mDatabaseManager.readLast7().size()== 0){
+            Toast.makeText(this,"no mood recorded",Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(this, mDatabaseManager.readLast7().get(position).getComment(), Toast.LENGTH_LONG).show();
+        }
     }
 }
 
