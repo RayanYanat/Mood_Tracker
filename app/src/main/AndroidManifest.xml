@@ -18,7 +18,7 @@
         </activity>
         <activity android:name=".controllers.HistoryActivity"/>
         <receiver
-            android:name=".models.MyAlarm">
+            android:name=".alarm.MyAlarm">
         </receiver>
     </application>
 

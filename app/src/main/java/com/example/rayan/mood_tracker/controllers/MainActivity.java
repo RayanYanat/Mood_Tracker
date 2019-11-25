@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -24,9 +25,10 @@ import android.widget.Toast;
 
 import com.example.rayan.mood_tracker.R;
 import com.example.rayan.mood_tracker.adapters.RecyclerAdapter;
+import com.example.rayan.mood_tracker.database.DatabaseManager;
 import com.example.rayan.mood_tracker.models.Mood;
 import com.example.rayan.mood_tracker.models.MoodStorage;
-import com.example.rayan.mood_tracker.models.MyAlarm;
+import com.example.rayan.mood_tracker.alarm.MyAlarm;
 
 
 import org.joda.time.LocalDate;
@@ -92,8 +94,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                if (mDatabaseManager.readLast().getMood()!= null) {
+                Log.d("main","" + mDatabaseManager.readLast().getMood().getPosition());
+                if (mDatabaseManager.readLast().getMood() != null && mDatabaseManager.readLast().getMood().getPosition() != -1 ) {
                     recyclerView.scrollToPosition((mDatabaseManager.readLast().getMood().getPosition()));
+                }
+                else{
+                    Log.d("main",""+ (collection.size() + 1) / 2);
+                    Log.d("main",""+ (collection.size()));
+                    recyclerView.scrollToPosition((collection.size() + 1) / 2);
+
                 }
             }
         });
@@ -216,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        moodPosition = ((collection.size() + 1) / 2);
         MoodStorage lastMood = mDatabaseManager.readLast();
         if (lastMood != null && lastMood.getEpoch().equals(LocalDate.now())) {
             moodPosition = lastMood.getMood().ordinal();
@@ -230,7 +238,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        moodPosition = ((collection.size() + 1) / 2);
         MoodStorage lastMood = mDatabaseManager.readLast();
         if (lastMood != null && lastMood.getEpoch().equals(LocalDate.now())) {
             moodPosition = lastMood.getMood().ordinal();
@@ -240,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.scrollToPosition(moodPosition);
 
     }
+
 
     public void playSound(Mood mood) {
         if (mMediaPlayer[mood.ordinal()] == null) {

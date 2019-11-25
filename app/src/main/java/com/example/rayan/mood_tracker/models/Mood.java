@@ -14,7 +14,7 @@ public enum Mood {
     private int drawableRes;
     private int color;
     private int sound;
-    private int position;
+    private int position = -1;
 
     @ColorInt
     public int getColor() {

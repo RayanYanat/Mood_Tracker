@@ -1,4 +1,4 @@
-package com.example.rayan.mood_tracker.controllers;
+package com.example.rayan.mood_tracker.database;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -99,7 +99,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)));
 
             moods.add(moodStorage);
-            cursor.moveToNext();
         }
         cursor.close();
         Collections.reverse(moods);
