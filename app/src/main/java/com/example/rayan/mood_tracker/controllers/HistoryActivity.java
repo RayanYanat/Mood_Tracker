@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 
 
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.rayan.mood_tracker.R;
 import com.example.rayan.mood_tracker.RecyclerViewClickListener;
@@ -21,8 +20,6 @@ import com.example.rayan.mood_tracker.models.MoodStorage;
 import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity implements RecyclerViewClickListener {
-
-    private DatabaseManager mDatabaseManager;
 
 
     @Override
@@ -38,17 +35,12 @@ public class HistoryActivity extends AppCompatActivity implements RecyclerViewCl
         HistoryRecyclerAdapter adapter = new HistoryRecyclerAdapter(moodStorages, this);
         historyRecyclerView.setAdapter(adapter);
 
-        mDatabaseManager = new DatabaseManager(this);
 
     }
 
     @Override
     public void onClick(View v, int position) {
-        if(mDatabaseManager.readLast7().size()== 0){
-            Toast.makeText(this,"no mood recorded",Toast.LENGTH_LONG).show();
-        }else {
-            Toast.makeText(this, mDatabaseManager.readLast7().get(position).getComment(), Toast.LENGTH_LONG).show();
-        }
+
     }
 }
 

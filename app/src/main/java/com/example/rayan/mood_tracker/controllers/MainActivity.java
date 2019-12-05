@@ -18,7 +18,6 @@ import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -89,30 +88,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView(LinearLayoutManager layoutManager){
-        //allows to choose the starting position of our recyclerview
-        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                Log.d("main","" + mDatabaseManager.readLast().getMood().getPosition());
-                if (mDatabaseManager.readLast().getMood() != null && mDatabaseManager.readLast().getMood().getPosition() != -1 ) {
-                    recyclerView.scrollToPosition((mDatabaseManager.readLast().getMood().getPosition()));
-                }
-                else{
-                    Log.d("main",""+ (collection.size() + 1) / 2);
-                    Log.d("main",""+ (collection.size()));
-                    recyclerView.scrollToPosition((collection.size() + 1) / 2);
-
-                }
-            }
-        });
-
+        final MoodStorage lastMood = mDatabaseManager.readLast();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
         RecyclerAdapter adapter = new RecyclerAdapter(collection);
         recyclerView.setAdapter(adapter);
+
+        //allows to choose the starting position of our recyclerview
+        if (lastMood != null && lastMood.getEpoch() == LocalDate.now() ) {
+            Log.d("main","position: " + lastMood.getMood().getPosition());
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerView.scrollToPosition((lastMood.getMood().getPosition()));
+                }
+            });
+        }
+        else{
+            Log.d("main",""+ (collection.size() + 1) / 2);
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerView.scrollToPosition((collection.size() + 1) / 2);
+                }
+            });
+
+        }
     }
 
     private void setUpButton(){
