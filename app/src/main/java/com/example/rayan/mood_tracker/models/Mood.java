@@ -26,8 +26,6 @@ public enum Mood {
         this.position = position;
         this.color = color;
         this.sound = sound;
-
-
     }
 
     public int getDrawableRes() {
