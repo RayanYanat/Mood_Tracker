@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -88,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView(LinearLayoutManager layoutManager){
-        final MoodStorage lastMood = mDatabaseManager.readLast();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         SnapHelper snapHelper = new LinearSnapHelper();
@@ -97,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         //allows to choose the starting position of our recyclerview
-        if (mDatabaseManager.readLast() != null && mDatabaseManager.readLast().getMood() != null && mDatabaseManager.readLast().getMood().getPosition() != -1  ) {
-            Log.d("main","position: " + lastMood.getMood().getPosition());
+        if (mDatabaseManager.readLast() != null && mDatabaseManager.readLast().getMood() != null ) {
             recyclerView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -107,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         else{
-            Log.d("main",""+ (collection.size() + 1) / 2);
             recyclerView.post(new Runnable() {
                 @Override
                 public void run() {
