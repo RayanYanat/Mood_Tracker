@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.rayan.mood_tracker.R;
 import com.example.rayan.mood_tracker.RecyclerViewClickListener;
@@ -21,6 +22,7 @@ import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity implements RecyclerViewClickListener {
 
+    private DatabaseManager mDatabaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +37,13 @@ public class HistoryActivity extends AppCompatActivity implements RecyclerViewCl
         HistoryRecyclerAdapter adapter = new HistoryRecyclerAdapter(moodStorages, this);
         historyRecyclerView.setAdapter(adapter);
 
+        mDatabaseManager = new DatabaseManager(this);
 
     }
 
     @Override
     public void onClick(View v, int position) {
+        Toast.makeText(this, mDatabaseManager.readLast7().get(position).getComment(), Toast.LENGTH_LONG).show();
 
     }
 }

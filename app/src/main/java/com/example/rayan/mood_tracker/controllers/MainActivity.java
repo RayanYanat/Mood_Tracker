@@ -97,12 +97,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         //allows to choose the starting position of our recyclerview
-        if (lastMood != null && lastMood.getEpoch() == LocalDate.now() ) {
+        if (mDatabaseManager.readLast() != null && mDatabaseManager.readLast().getMood() != null && mDatabaseManager.readLast().getMood().getPosition() != -1  ) {
             Log.d("main","position: " + lastMood.getMood().getPosition());
             recyclerView.post(new Runnable() {
                 @Override
                 public void run() {
-                    recyclerView.scrollToPosition((lastMood.getMood().getPosition()));
+                    recyclerView.scrollToPosition((mDatabaseManager.readLast().getMood().getPosition()));
                 }
             });
         }

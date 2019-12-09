@@ -99,6 +99,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)));
 
             moods.add(moodStorage);
+            cursor.moveToNext();
         }
         cursor.close();
         Collections.reverse(moods);
