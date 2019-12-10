@@ -39,17 +39,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static int BUNDLE_REQUEST_CODE = 36;
-
     private RecyclerView recyclerView;
 
     private List<Mood> collection = new ArrayList<>();
 
     private DatabaseManager mDatabaseManager;
 
-    int moodPosition;
+    private int moodPosition;
 
-    public String comment;
+    private String comment;
 
     private MediaPlayer[] mMediaPlayer = new MediaPlayer[Mood.values().length];
 
@@ -95,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         //allows to choose the starting position of our recyclerview
-        if (mDatabaseManager.readLast() != null && mDatabaseManager.readLast().getMood() != null ) {
+        if (mDatabaseManager.readLast() != null) {
             recyclerView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -156,8 +154,8 @@ public class MainActivity extends AppCompatActivity {
         historyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent HistoryActivity = new Intent(MainActivity.this, HistoryActivity.class);
-                startActivityForResult(HistoryActivity, BUNDLE_REQUEST_CODE);
+                Intent historyActivity = new Intent(MainActivity.this, HistoryActivity.class);
+                startActivity(historyActivity);
             }
         });
     }
@@ -248,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void playSound(Mood mood) {
+    private void playSound(Mood mood) {
         if (mMediaPlayer[mood.ordinal()] == null) {
             mMediaPlayer[mood.ordinal()] = MediaPlayer.create(this, mood.getSound());
         }

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 
 import com.example.rayan.mood_tracker.R;
-import com.example.rayan.mood_tracker.RecyclerViewClickListener;
+import com.example.rayan.mood_tracker.listener.RecyclerViewClickListener;
 import com.example.rayan.mood_tracker.models.MoodStorage;
 
 
@@ -26,8 +26,6 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<HistoryRecycler
     private List<MoodStorage> mMoodStorage;
 
     private RecyclerViewClickListener mItemListener;
-
-    public String date;
 
     public HistoryRecyclerAdapter(List<MoodStorage> moodStorage, RecyclerViewClickListener itemListener) {
         mMoodStorage = moodStorage;

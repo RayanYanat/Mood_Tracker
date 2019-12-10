@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.rayan.mood_tracker.R;
-import com.example.rayan.mood_tracker.RecyclerViewClickListener;
+import com.example.rayan.mood_tracker.listener.RecyclerViewClickListener;
 import com.example.rayan.mood_tracker.adapters.HistoryRecyclerAdapter;
 import com.example.rayan.mood_tracker.database.DatabaseManager;
 import com.example.rayan.mood_tracker.models.MoodStorage;
